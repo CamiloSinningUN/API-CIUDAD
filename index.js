@@ -45,10 +45,7 @@ app.get('/:city', (req, res) => {
             res.send('Magdalena');
             break;
         default:
-            if (!cityToDepartment.has(cityWithoutAccents)) {
-                res.send(city);
-            }
-            const department = cityToDepartment.get(cityWithoutAccents);
+            const department = cityToDepartment.get(cityWithoutAccents) || city;
             // put first letter in uppercase
             console.log(department);
             const departmentWithUppercase = department.charAt(0).toUpperCase() + department.slice(1);
