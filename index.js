@@ -31,8 +31,10 @@ app.get('/:city', (req, res) => {
     // convert city to lower case and remove accents
     const cityWithoutAccents = city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const department = cityToDepartment.get(cityWithoutAccents);
+    // put first letter in uppercase
+    const departmentWithUppercase = department.charAt(0).toUpperCase() + department.slice(1);
     // send response
-    res.send(department);
+    res.send(departmentWithUppercase);
 
 });
 
