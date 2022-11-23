@@ -29,7 +29,11 @@ app.use(morgan('dev'));
 app.get('/:city', (req, res) => {
     const city = req.params.city;
     // convert city to lower case and remove accents
+
     const cityWithoutAccents = city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    if (!cityToDepartment.has(cityWithoutAccents)) {
+        res.send(city);
+    }
     const department = cityToDepartment.get(cityWithoutAccents);
     // put first letter in uppercase
     const departmentWithUppercase = department.charAt(0).toUpperCase() + department.slice(1);
