@@ -17,6 +17,7 @@ fs.createReadStream('Departamentos_y_municipios_de_Colombia.csv')
             // put everything in lowercase and remove accents
             const city = row['MUNICIPIO'].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
             const department = row['DEPARTAMENTO'].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            // console.log(city, department);
             cityToDepartment.set(city, department);
         });
     });
@@ -29,17 +30,36 @@ app.use(morgan('dev'));
 app.get('/:city', (req, res) => {
     const city = req.params.city;
     // convert city to lower case and remove accents
-
     const cityWithoutAccents = city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-    console.log(cityWithoutAccents);
-    if (!cityToDepartment.has(cityWithoutAccents)) {
-        res.send(city);
+    switch (cityWithoutAccents) {
+        case 'bogota':
+            res.send('Cundinamarca');
+            break;
+        case 'cartagena':
+            res.send('Bolivar');
+            break;
+        case 'barranquilla':
+            res.send('Atlantico');
+            break;
+        case 'santa Marta':
+            res.send('Magdalena');
+            break;
+        default:
+            if (!cityToDepartment.has(cityWithoutAccents)) {
+                res.send(city);
+            }
+            const department = cityToDepartment.get(cityWithoutAccents);
+            // put first letter in uppercase
+            console.log(department);
+            const departmentWithUppercase = department.charAt(0).toUpperCase() + department.slice(1);
+
+            // send response
+            res.send(departmentWithUppercase);
+
+            break;
     }
-    const department = cityToDepartment.get(cityWithoutAccents);
-    // put first letter in uppercase
-    const departmentWithUppercase = department.charAt(0).toUpperCase() + department.slice(1);
-    // send response
-    res.send(departmentWithUppercase);
+
+
 
 });
 
