@@ -31,6 +31,7 @@ app.get('/:city', (req, res) => {
     // convert city to lower case and remove accents
 
     const cityWithoutAccents = city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    console.log(cityWithoutAccents);
     if (!cityToDepartment.has(cityWithoutAccents)) {
         res.send(city);
     }
